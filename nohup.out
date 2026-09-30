@@ -1,0 +1,4 @@
+[2m2026-09-27T01:24:40.304362Z[0m [32m INFO[0m [2mplayitd::daemon[0m[2m:[0m Starting playitd [3msocket_path[0m[2m=[0mNone [3msecret_path[0m[2m=[0mNone [3mversion[0m[2m=[0m1.0.10
+[2m2026-09-27T01:24:41.971890Z[0m [33m WARN[0m [2mplayit_agent_core::agent_control::maintained_control[0m[2m:[0m control session expired; reconnecting [3mreason[0m[2m=[0mSessionNotSetup
+[2m2026-09-27T01:24:42.056802Z[0m [32m INFO[0m [2mplayitd::daemon[0m[2m:[0m playit connected; tunnels loaded [3magent_id[0m[2m=[0mba22ec1f-d4e5-4765-ab91-75c3e4fe7b91 [3mtunnel_count[0m[2m=[0m1 [3mpending_tunnel_count[0m[2m=[0m0 [3mdisabled_tunnel_count[0m[2m=[0m0 [3maccount_status[0m[2m=[0m"verified"
+[2m2026-09-27T01:24:43.197818Z[0m [33m WARN[0m [2mplayit_agent_core::agent_control::maintained_control[0m[2m:[0m control session expired; reconnecting [3mreason[0m[2m=[0mSessionNotSetup

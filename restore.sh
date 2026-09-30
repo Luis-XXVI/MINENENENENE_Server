@@ -1,0 +1,50 @@
+#!/bin/bash
+set -e
+
+# ===== CONFIGURAÇÃO =====
+BACKUP_REPO="hmmsla5-spec/crafty-backups"
+RESTORE_TARGET="/workspaces/MINENENENENE_Server"
+PLAYIT_TARGET="/home/codespace/.config"
+# =========================
+
+echo "Buscando o backup mais recente em $BACKUP_REPO..."
+LATEST=$(gh release list --repo "$BACKUP_REPO" --limit 1 | cut -f3)
+
+if [ -z "$LATEST" ]; then
+  echo "Nenhum backup encontrado no repositório."
+  exit 1
+fi
+
+echo "Baixando release: $LATEST"
+mkdir -p /tmp/restore
+gh release download "$LATEST" --repo "$BACKUP_REPO" --dir /tmp/restore --clobber
+
+echo "Juntando as partes do backup..."
+cat /tmp/restore/*_part_* > /tmp/restore/crafty-backup.tar.gz
+
+echo "Extraindo backup..."
+mkdir -p /tmp/restore_extract
+
+if compgen -G "/tmp/restore/*.tar.gz_part_*" > /dev/null; then
+  echo "Backup dividido em partes, juntando..."
+  cat /tmp/restore/*.tar.gz_part_* > /tmp/restore/backup_completo.tar.gz
+  tar -xzf /tmp/restore/backup_completo.tar.gz -C /tmp/restore_extract
+else
+  tar -xzf /tmp/restore/*.tar.gz -C /tmp/restore_extract
+fi
+
+echo "Restaurando 'SERVERS MINE' em $RESTORE_TARGET..."
+rm -rf "$RESTORE_TARGET/SERVERS MINE"
+mv "/tmp/restore_extract/SERVERS MINE" "$RESTORE_TARGET/"
+
+if [ -d "/tmp/restore_extract/playit_gg" ]; then
+  echo "Restaurando config do playit em $PLAYIT_TARGET..."
+  mkdir -p "$PLAYIT_TARGET"
+  rm -rf "$PLAYIT_TARGET/playit_gg"
+  mv /tmp/restore_extract/playit_gg "$PLAYIT_TARGET/"
+else
+  echo "Aviso: backup antigo sem config do playit — endereço do servidor pode mudar."
+fi
+
+echo "Restauração concluída!"
+rm -rf /tmp/restore /tmp/restore_extract
